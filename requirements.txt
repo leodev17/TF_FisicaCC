@@ -4,4 +4,3 @@ matplotlib
 scipy
 streamlit_option_menu
 pandas
-math
