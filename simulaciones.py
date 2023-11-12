@@ -5,7 +5,7 @@ from matplotlib.ticker import FormatStrFormatter
 from scipy.constants import pi, g
 from streamlit_option_menu import option_menu
 import pandas as pd
-from math import cos
+from numpy import cos
 from scipy.signal import find_peaks
 from matplotlib.animation import FuncAnimation
 import streamlit.components.v1 as components
