@@ -1,8 +1,4 @@
-import numpy as np
 import time
-import matplotlib.pyplot as plt
-import streamlit as st
-
 from simulaciones import *
 with st.sidebar:
     st.image("UPC.png")
