@@ -1,4 +1,3 @@
-import time
 from simulaciones import *
 with st.sidebar:
     st.image("UPC.png")
