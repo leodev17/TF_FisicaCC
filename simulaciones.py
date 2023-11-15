@@ -157,7 +157,7 @@ def prob(tipo_sim):
             \\[2ex]
             E=2 \cdot \displaystyle\sum_{i=0}^n \frac{k \cdot \lambda \cdot \Delta y}{r_i^2} \cdot \frac{x}{r_i}
             \\[2ex]
-            E=2 \cdot \displaystyle\sum_{i=0}^n \frac{k \cdot \lambda \cdot \Delta y \cdot x}{(\sqrt{x^2+i \cdot \Delta y^2})^3}
+            E=2 \cdot \displaystyle\sum_{i=0}^n \frac{k \cdot \lambda \cdot \Delta y \cdot x}{(\sqrt{x^2+(i \cdot \Delta y)^2})^3}
             \\[2ex]
             E=2 \cdot k \cdot \lambda \cdot \Delta y \cdot x \cdot \displaystyle\sum_{i=0}^n \frac{1}{(\sqrt{x^2+(i \cdot \Delta y)^2})^3}
             ''')
