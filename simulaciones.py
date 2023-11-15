@@ -2,7 +2,9 @@ import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
-from scipy.constants import pi, g
+from scipy.constants import pi, g, epsilon_0
+#Constante de Coulomb
+k=1/(4*pi*epsilon_0)
 from streamlit_option_menu import option_menu
 import pandas as pd
 from numpy import cos
@@ -85,7 +87,95 @@ def prob(tipo_sim):
             st.write("Implementacion de funciones que logran solucionar el problema:")
             st.image("term_3.png")
     if tipo_sim == 'B':
-        st.write("Problema sobre campo electrico")
+        st.subheader("Contexto y objetivo de la simulación")
+        st.write("Para el presente trabajo se debe simular el campo eléctrico generado por una barra de longitud infinita"
+                 " cargada eléctricamente y de forma homogénea. Según la distancia a la que se tome un punto 'P', esta barra generará"
+                 " un determinado campo eléctrico en ese punto. El desafío de este trabajo es, con el cálculo diferencial,"
+                 " poder obtener ese valor generado. Durante las sesiones de clase se aprendió a obtener el"
+                 " campo eléctrico para cargas puntuales pero esta situación no es igual. El caso de analizar una barra"
+                 " de longitud infinita necesitará una mayor atención.")
+        st.subheader("Problema propuesto")
+        st.write(
+            "Es posible modelar una barra cargada de longitud infinita como una barra con una gran cantidad de pequeñas cargas. "
+            "Estas pequeñas cargas tendrán una carga eléctrica pequeña Δq. Sabemos que cada uno de estos Δq va a formar un pequeño campo eléctrico"
+            " ΔE.r. Sabemos que el campo eléctrico es una cantidad vectorial por lo que para sumarlos debemos considerar"
+            " la orientación de su vector unitario:")
+        st.image("elect_1.jpg")
+        st.write("Se sabe que para cada Δq, se formará el siguiente campo eléctrico ΔE:")
+        st.latex(r'''
+                            \Delta \overrightarrow{E_{i}} = \frac{k \cdot \Delta q_i}{r_i^2} \cdot \widehat{r}_i
+                            ''')
+        st.latex(r''' \widehat{r}_i = cos(\theta_i)\widehat{i} - sen(\theta_i)\widehat{j}
+         \newline
+         k=\text{Constante de Coulomb} = 9 \cdot 10^9 \frac{Nm^2}{C^2}''')
+        st.write("Se le brinda a usted como dato la densidad lineal de carga (λ=Δq/Δy) de la barra para que pueda"
+                 " relacionar la cantidad de carga asociada a un Δq cualquiera con la longitud Δy de las divisiones"
+                 " que se tomaron en la barra. Considerando una longitud de la barra muy grande. Se le solicita a "
+                 "usted que mediante una suma finita de los ΔE, halle el campo eléctrico total en un punto P. Plasme"
+                 " la variación del campo eléctrico generado por la barra en un gráfico y además compárelo con el "
+                 "siguiente modelo teórico obtenido de resolver una integral:")
+        st.latex(r"E= \frac{\lambda}{2 \pi \cdot \varepsilon_0 \cdot x}")
+        ter = r'''
+        \text{Donde:}
+        \newline
+        \lambda
+        \text{: Densidad lineal de carga}
+        \newline
+        \text{x: Distancia del punto P al conductor en m}
+        \newline
+        \varepsilon_0
+        \text{: Permitividad eléctrica del vacío } 
+        (\varepsilon_0=8.85 \cdot 10^{-12} \frac{C^2}{Nm^2})
+        '''
+        st.markdown('''
+                        <style>.katex-html {text-align: left;}</style>''', unsafe_allow_html=True)
+        st.latex(ter)
+        st.write("Analice las gráficas obtenidas por ambos métodos de cálculo y considere los siguientes parámetros:")
+        st.image("elect_3.jpg")
+        with st.expander("Análisis del problema y planteamiento general de la solución propuesta"):
+            st.write("La lógica de la solución en realidad no es difícil de entender. Simplemente debemos sumar los"
+                     " valores de cada ΔE considerando la máxima cantidad de divisiones a la barra. Pero hay que"
+                     " tener cuidado porque el campo eléctrico es una cantidad física vectorial. Por lo que no podemos"
+                     " sumar los valores de forma simple. Pero ocurre algo curioso, a partir de un punto P, si dividimos"
+                     " el vector en componentes horizontales y verticales, vamos a encontrar un punto simétrico que "
+                     "podrá anular su componente vertical y duplicar su componente horizontal. Por lo que solo podemos"
+                     " considerar la parte superior y generará un campo eléctrico paralelo al vector horizontal i. El valor"
+                     " total del campo eléctrico será el doble de la suma de las componentes horizontales de la parte"
+                     " superior de la barra:")
+            st.image("elect_2.jpg")
+            st.write("Ahora el siguiente paso sería definir la sumatoria que vamos a considerar, debemos hallar el ΔE de "
+                     "cada Δq. Debido a que vamos a realizar una sumatoria de n elementos, hay que considerar un número"
+                     " muy grande de divisiones, vamos a considerar 10000 particiones. Pero, si vamos a hacer 10000 particiones"
+                     " también hay que considerar una cantidad fija de la barra, para así obtener la longitud de cada pequeña"
+                     " sección Δy. Una vez entendido que vamos a realizar una sumatoria de n elementos sumar el doble de las"
+                     " componentes horizontales de la mitad superior, ya estamos en condiciones para empezar a definir nuestra"
+                     " sumatoria:")
+            st.latex(r'''
+            E=2 \cdot \displaystyle\sum_{i=0}^n \frac{k \cdot \Delta q}{r_i^2} \cdot cos(\theta_i) 
+            \\[2ex]
+            E=2 \cdot \displaystyle\sum_{i=0}^n \frac{k \cdot \lambda \cdot \Delta y}{r_i^2} \cdot cos(\theta_i) 
+            \\[2ex]
+            E=2 \cdot \displaystyle\sum_{i=0}^n \frac{k \cdot \lambda \cdot \Delta y}{r_i^2} \cdot \frac{x}{r_i}
+            \\[2ex]
+            E=2 \cdot \displaystyle\sum_{i=0}^n \frac{k \cdot \lambda \cdot \Delta y \cdot x}{(\sqrt{x^2+n \cdot \Delta y^2})^3}
+            \\[2ex]
+            E=2 \cdot k \cdot \lambda \cdot \Delta y \cdot x \cdot \displaystyle\sum_{i=0}^n \frac{1}{(\sqrt{x^2+(i \cdot \Delta y)^2})^3}
+            ''')
+            st.write("Ahora solo debemos sumar los n valores. Para nuestro programa hemos considerado unos 10000 particiones"
+                     " para una barra de longitud superior igual a 1000. Es importante definir la longitud total para así obtener"
+                     " el valor de Δy. Pero aquí también podemos hacernos una pregunta. La sumatoria puede ser divergente?"
+                     "Es 1000 un buen valor para considerar una barra infinita? Para responder esta pregunta hemos hecho una"
+                     " gráfica extra que muestra los valores del campo eléctrica para una distancia fija al aumentar la longitud"
+                     " superior de la barra. La gráfica nos muestra que mientras aumenta la longitud, el valor del campo "
+                     "eléctrico tiene cierto tope y al parecer 1000 es un valor adecuado porque a esa altura hay una tendencia"
+                     " a casi no variar el valor del campo eléctrico generado.")
+            st.image("elect_4.jpg")
+            st.write(
+                "Ahora solo queda definir una función con Python y Numpy que logre calcular la sumatoria. Debido a la"
+                " facilidad que ofrece Numpy para los cálculos, podemos definir un array con numeros del 0 al 10000. Luego"
+                " conseguir un nuevo array que obtenga los elementos de cada ΔE en función del array definido inicialmente."
+                " Luego hallamos la suma de los valores del segundo array. Para hacer esto usaremos la siguiente función:")
+            st.image("elect_5.jpg")
     if tipo_sim == 'C':
         st.subheader("Contexto y objetivo de la simulación")
         st.write("Para el presente trabajo se debe simular desplazamiento en el eje 'y' del efecto producido por dos "
@@ -325,13 +415,73 @@ def mostrar_sim(tipo_sim):
         st.image("terminal.gif")
 
     if tipo_sim == 'B':
-        st.write("hola")
+        st.subheader("Simulacion")
+        # DEFINICION DE VARIABLES
+        # Densidad lineal de carga
+        dens_lin = st.slider(
+            'Seleccione la densidad lineal de carga (nC/m)',
+            20.0, 80.0, step=0.1, value=35.8)
+        # Longitud superior de la barra
+        long_sup = 1000
+        # Numero de divisiones que se haran a la barra
+        num_term = 10000
+        # DEFINICION DE FUNCIONES
+        # Funcion para hallar el valor teorico a una distancia x
+
+        def valor_teorico(x):
+            return dens_lin * pow(10, -9) / (2 * x * pi * epsilon_0)
+
+        # Funcion que haya la suma de cada ΔE con el método explicado en el análisis del problema
+        def encontrar_suma_desde_p(L, x):
+            dy = L / num_term
+            n = np.arange(num_term+1)
+            arr = 1 / np.power(np.power(x, 2) + np.power(dy * n, 2), 3 / 2)
+            suma = np.sum(arr)
+            suma = suma * 2 * dens_lin * x * dy * k * pow(10, -9)
+            return suma
+        # BLOQUE DE GENERACION DEL GRAFICO PYPLOT
+        funcion_vectorizada = np.vectorize(encontrar_suma_desde_p)
+        funcion_vectorizada_2 = np.vectorize(valor_teorico)
+        # Definicion de ejes, grafica del modelo con sumatorias
+        eje_x2 = np.arange(2, 30.01, 0.01)
+        eje_y2 = funcion_vectorizada(long_sup, eje_x2)
+        # Definicion de los valores con el metodo teorico
+        eje_y3 = funcion_vectorizada_2(eje_x2)
+        fig, (ax2, ax3) = plt.subplots(1, 2, figsize=(14, 5))
+        ax2.plot(eje_x2, eje_y2, color='red')
+        ax2.set(xlabel='Distancia del punto P a la barra (m)', ylabel='Campo eléctrico generado (N/C)',
+                title='Gráfico E vs x mediante método numérico')
+        decimal_formatter = ticker.FormatStrFormatter("%.2f")
+        ax2.xaxis.set_major_formatter(decimal_formatter)
+        ax3.plot(eje_x2, eje_y3, color='green')
+        ax3.set(xlabel='Distancia del punto P a la barra (m)', ylabel='Campo eléctrico generado (N/C)',
+                title='Gráfico E vs x según modelo teórico')
+        decimal_formatter = ticker.FormatStrFormatter("%.2f")
+        ax3.xaxis.set_major_formatter(decimal_formatter)
+        st.pyplot(plt)
+        fig, ax4 = plt.subplots(1, 1, figsize=(8, 6))
+        ax4.plot(eje_x2, eje_y2, linestyle='-', color='red')
+        ax4.plot(eje_x2, eje_y3, linestyle='--')
+        ax4.set(xlabel='Distancia del punto P a la barra (m)', ylabel='Campo eléctrico generado (N/C)',
+                title='Gráfico E vs x')
+        decimal_formatter = ticker.FormatStrFormatter("%.2f")
+        ax4.xaxis.set_major_formatter(decimal_formatter)
+        ax4.legend(['Método numerico', 'Resultado teórico'])
+        st.pyplot(plt)
+        # EVALUACION DE VALORES PARA AMBOS METODOS
+        st.subheader("Comparación de valores generados")
+        x_prueba = st.slider(
+            'Seleccione la distancia x (m) del punto P para realizar la comparación',
+            2.00, 30.00, step=0.01, value=27.25)
+        df = pd.DataFrame({'Valor experimental': [encontrar_suma_desde_p(long_sup, x_prueba)], 'Valor teorico': [valor_teorico(x_prueba)],
+                           '% de error': [abs(100 * (valor_teorico(x_prueba) - encontrar_suma_desde_p(long_sup, x_prueba)) / valor_teorico(x_prueba))]})
+        st.dataframe(df.style.format("{:.9f}"), hide_index=True)
     if tipo_sim == 'C':
         st.subheader("Simulacion")
         # Parametros
         A = st.slider(
             'Seleccione la amplitud de ambas ondas en m',
-            2.00, 4.00, step=0.01, value=3.45)
+            0.00, 2.00, step=0.01, value=1.45)
         v = 340.0  # v=f*λ
         pos_x = st.slider(
             'Seleccione la posicion x en m que se tendrá como referencia',
@@ -407,6 +557,10 @@ def mostrar_sim(tipo_sim):
         plt.title('Deteccion de picos para la hallar la frecuencia de pulsos')
         plt.xlabel("Tiempo (s)")
         plt.ylabel("y (m)")
+        for i in picos*0.0001:
+            i=round(i,4)
+            plt.annotate("x=" + str(i), xy=(i, senal_combinada[int(i*10000)]), xytext=(i + 0.01, senal_combinada[int(i*10000)]-1),
+                     arrowprops=dict(arrowstyle='->'))
         # Configurar el formato para 2 decimales en el eje x
         plt.gca().xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
         # Configurar el formato para 2 decimales en el eje y
