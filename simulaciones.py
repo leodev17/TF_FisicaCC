@@ -162,12 +162,12 @@ def prob(tipo_sim):
             E=2 \cdot k \cdot \lambda \cdot \Delta y \cdot x \cdot \displaystyle\sum_{i=0}^n \frac{1}{(\sqrt{x^2+(i \cdot \Delta y)^2})^3}
             ''')
             st.write("Ahora solo debemos sumar los n valores. Para nuestro programa hemos considerado unos 10000 particiones"
-                     " para una barra de longitud superior igual a 1000. Es importante definir la longitud total para así obtener"
-                     " el valor de Δy. Pero aquí también podemos hacernos una pregunta. La sumatoria puede ser divergente?"
-                     "Es 1000 un buen valor para considerar una barra infinita? Para responder esta pregunta hemos hecho una"
+                     " para una barra de longitud superior igual a 1000 m. Es importante definir la longitud total para así obtener"
+                     " el valor de Δy. Pero aquí también podemos hacernos una pregunta. ¿La sumatoria puede ser divergente?"
+                     " ¿Es 1000 un buen valor para considerar una barra infinita? Para responder esta pregunta hemos hecho una"
                      " gráfica extra que muestra los valores del campo eléctrica para una distancia fija al aumentar la longitud"
                      " superior de la barra. La gráfica nos muestra que mientras aumenta la longitud, el valor del campo "
-                     "eléctrico tiene cierto tope y al parecer 1000 es un valor adecuado porque a esa altura hay una tendencia"
+                     "eléctrico tiene cierto tope y al parecer 1000 m es un valor adecuado porque a esa altura hay una tendencia"
                      " a casi no variar el valor del campo eléctrico generado.")
             st.image("elect_4.jpg")
             st.write(
