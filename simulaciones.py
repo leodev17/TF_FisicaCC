@@ -700,7 +700,7 @@ def mostrar_sim(tipo_sim):
         plt.text(10, 0.3, option_1.split()[0], fontsize=9, ha='right')
         plt.text(10, -0.7, option_2.split()[0], fontsize=9, ha='right')
         st.pyplot(plt)
-        st.subheader("Tiempo de trayectoria según la intersección en la inerfase")
+        st.subheader("Tiempo de trayectoria según la intersección en la interfase")
         # BLOQUE DEL SEGUNDO GRAFICO, EL DE Tiempo vs X
         plt.close()
         plt.title("Gráfica Tiempo vs x")
